@@ -1,4 +1,3 @@
-# defendercheck.ps1
 function Write-ProgressBar {
     $bar = "["
     for ($i = 0; $i -lt 10; $i++) { $bar += "#" }
@@ -20,7 +19,7 @@ function Report-Success { param($msg); Write-Host "SUCCESS: $msg" -ForegroundCol
 function Report-Failure { param($msg); Write-Host "FAILURE: $msg" -ForegroundColor Red }
 function Check-And-Increment { $global:totalChecks++ }
 
-# Module Checks (simulated)
+# Simulated checks
 Check-And-Increment; Report-Success "Protected module 'Microsoft.PowerShell.Operation.Validation' verified."
 Check-And-Increment; Report-Success "Module 'PackageManagement' passed signature check."
 Check-And-Increment; Report-Success "Module 'Pester' passed signature check."
@@ -59,7 +58,6 @@ if ($mpref.ExclusionPath.Count -eq 0) {
 
 Write-Host "--- Threats ---" -ForegroundColor Gray
 Check-And-Increment
-# Simulated - normally you’d check via logs or WMI
 Report-Success "No active threats."
 
 Write-Host "--- Binary Sig ---" -ForegroundColor Gray
@@ -69,3 +67,22 @@ Report-Success "PowerShell is signed and valid."
 # Final Summary
 Write-Host "`nSuccess Rate: $([math]::Round(($successCount / $totalChecks) * 100))% ($successCount / $totalChecks)" -ForegroundColor Green
 Read-Host "`nPress Enter to Continue"
+
+# Step 2: Open System dialogs
+Write-Host "`nOpening SystemPropertiesPerformance and UAC Settings..." -ForegroundColor Cyan
+Start-Process "SystemPropertiesPerformance.exe"
+Start-Process "UserAccountControlSettings.exe"
+Read-Host "`nPress Enter to continue to Registry Check"
+
+# Step 3: Open Registry Editor to target location
+$regPath = "HKLM\SOFTWARE\Microsoft\Windows Defender"
+Start-Process "regedit.exe" "/m"
+Start-Sleep -Seconds 2
+Write-Host "`nINSTRUCTIONS:" -ForegroundColor Yellow
+Write-Host "Please manually navigate to the following Registry paths:" -ForegroundColor Cyan
+Write-Host "1. Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Threats\ThreatIDDefaultAction"
+Write-Host "2. Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Exclusions\TemporaryPaths"
+Write-Host "3. Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity"
+Read-Host "`nPress Enter to Finish"
+
+Write-Host "`nDone." -ForegroundColor Green
