@@ -1,3 +1,4 @@
+
 function Write-ProgressBar {
     $bar = "["
     for ($i = 0; $i -lt 10; $i++) { $bar += "#" }
@@ -74,15 +75,24 @@ Start-Process "SystemPropertiesPerformance.exe"
 Start-Process "UserAccountControlSettings.exe"
 Read-Host "`nPress Enter to continue to Registry Check"
 
-# Step 3: Open Registry Editor to target location
-$regPath = "HKLM\SOFTWARE\Microsoft\Windows Defender"
+# Step 3: Open Registry Editor
+Write-Host "`nOpening Registry Editor..." -ForegroundColor Cyan
 Start-Process "regedit.exe" "/m"
 Start-Sleep -Seconds 2
-Write-Host "`nINSTRUCTIONS:" -ForegroundColor Yellow
-Write-Host "Please manually navigate to the following Registry paths:" -ForegroundColor Cyan
-Write-Host "1. Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Threats\ThreatIDDefaultAction"
-Write-Host "2. Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Exclusions\TemporaryPaths"
-Write-Host "3. Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity"
-Read-Host "`nPress Enter to Finish"
 
+Write-Host "`nINSTRUCTIONS:" -ForegroundColor Yellow
+
+# Path 1
+Read-Host "`nPress Enter to check Path 1"
+Write-Host "Go to: Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Threats\ThreatIDDefaultAction" -ForegroundColor Cyan
+
+# Path 2
+Read-Host "`nPress Enter to check Path 2"
+Write-Host "Go to: Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Exclusions\TemporaryPaths" -ForegroundColor Cyan
+
+# Path 3
+Read-Host "`nPress Enter to check Path 3"
+Write-Host "Go to: Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" -ForegroundColor Cyan
+
+Read-Host "`nPress Enter to Finish"
 Write-Host "`nDone." -ForegroundColor Green
